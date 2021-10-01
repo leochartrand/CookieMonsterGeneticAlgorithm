@@ -1,3 +1,5 @@
+#Genetic Algorithm in Unity
+
 Agents learn to eat all of the food on a grid.
 
 The agents make their decisions based on their strategy and their immediate environment. 
