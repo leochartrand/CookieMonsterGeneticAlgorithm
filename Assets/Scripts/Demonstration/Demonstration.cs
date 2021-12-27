@@ -31,6 +31,9 @@ public class Demonstration : MonoBehaviour
 
     public void NextStep()
     {
+        if (environment.isEmpty()) {
+            GameObject.Find("Next Step").SetActive(false);
+        }
         environment.Step();
         ugrid.UpdateGrid(environment.GetAgentRow(), environment.GetAgentCol());
     }

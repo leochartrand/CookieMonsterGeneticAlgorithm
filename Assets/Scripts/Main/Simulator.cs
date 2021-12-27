@@ -100,6 +100,12 @@ public class Simulator : MonoBehaviour
         GameObject.Find("Simulator").SetActive(false);
     }
 
+    public void Quit() 
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
+
 
     //==================================================================================================================
     

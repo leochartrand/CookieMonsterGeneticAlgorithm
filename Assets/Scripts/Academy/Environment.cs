@@ -35,10 +35,7 @@ namespace Academy
         {
             for (int i = 0; i < 1000; i++)
             {
-                if (nomGrid.getNomCount() <= 0)
-                {
-                    break;
-                }
+                if (isEmpty()) break;
                 
                 Task action = Task.Factory.StartNew(() => Step());
                     
@@ -68,6 +65,9 @@ namespace Academy
             return agent.GetCol();
         }
 
-
+        public bool isEmpty() 
+        {
+            return (nomGrid.getNomCount() <= 0);
+        } 
     }
 }
