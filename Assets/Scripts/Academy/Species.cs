@@ -18,29 +18,17 @@ public class Species
     public Species(float mr)
     {
         MutationRate = mr;
+        GenerateRandomStrategy();
+        fitness = 0;
     }
 
-    public void Mutate()
+    public Species Reproduce() 
     {
-        StringBuilder mutatedGenome = new StringBuilder(genome);
-
-        int rate = (int) (Mathf.Floor(Mathf.Tan((-Mathf.PI/2) * (Random.Range(0.0f, 1.0f) + 1.1f)) + 1.5f));
-
-        for (int i = 0; i < 10; i++)
-        {
-            int index = Random.Range(0, genome.Length);
-            mutatedGenome[index] = Convert.ToChar(Random.Range(1, 6) + 48);
-        }
-
-        genome = mutatedGenome.ToString();
-    }
-
-    public void GenerateRandomStrategy()
-    {
-        for (int i = 0; i < 162; i++)
-        {
-            genome += Random.Range(1, 6).ToString();
-        }
+        Species clone = new Species(this.MutationRate);
+        clone.SetFitness(this.fitness);
+        clone.SetStrategy(this.genome);
+        clone.Mutate();
+        return clone;
     }
 
     public void SetStrategy(string str)
@@ -61,6 +49,31 @@ public class Species
     public int GetFitness()
     {
         return fitness;
+    }
+
+    // Private Methods
+    private void Mutate()
+    {
+        StringBuilder mutatedGenome = new StringBuilder(genome);
+
+        // int rate = (int) (Mathf.Floor((Mathf.Tan((-Mathf.PI/2) * (Random.Range(0.0f, 1.0f) + 1.1f))/4 + 1.1f)*MutationRate*genome.Length));
+        int rate = (int) (Mathf.Floor(MutationRate*genome.Length));
+
+        for (int i = 0; i < rate; i++)
+        {
+            int index = Random.Range(0, genome.Length);
+            mutatedGenome[index] = Convert.ToChar(Random.Range(1, 7) + 48);
+        }
+
+        genome = mutatedGenome.ToString();
+    }
+
+    private void GenerateRandomStrategy()
+    {
+        for (int i = 0; i < 162; i++)
+        {
+            genome += Random.Range(1, 7).ToString();
+        }
     }
     
 }

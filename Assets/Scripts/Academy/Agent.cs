@@ -30,7 +30,7 @@ public class Agent
     public void action(byte state, NomGrid nomGrid, float epsilon)
     {
         //Stochastic process to encourage exploration and test robustness
-        //Epsilon starts at 0.1
+        //Epsilon starts at 0.01
         Random rnd = new Random();
         float r = (float)rnd.NextDouble();
         if (r < epsilon)
@@ -67,7 +67,7 @@ public class Agent
             case 6:
                 //Do nothing
                 //Ideally natural selection should eliminate this gene variation
-                fitness--;
+                //fitness--;
                 break;
         }
     }
@@ -76,17 +76,12 @@ public class Agent
     {
         if (state >= 162)
         {
-            Debug.Log("wtf caliss");
+            Debug.LogError("Grid cell state error");
         }
         if (state >= 81)
         {
             nomGrid.eatMe(posRow, posCol);
-            fitness += 10000;
-            /*
-            if (nomGrid.eatMe(posRow, posCol))
-            {
-                fitness += 25;
-            }*/
+            fitness += 500;
         }
         else
         {
@@ -96,7 +91,6 @@ public class Agent
 
     private void wallCrash()
     {
-        //fitness--;
         fitness -= 5;
     }
 
@@ -109,7 +103,7 @@ public class Agent
         else
         {
             posRow++;
-            fitness--;
+            //fitness--;
         }
     }
     
@@ -122,7 +116,7 @@ public class Agent
         else
         {
             posCol++;
-            fitness--;
+            //fitness--;
         }
     }
     
@@ -135,7 +129,7 @@ public class Agent
         else
         {
             posRow--;
-            fitness--;
+            //fitness--;
         }
     }
     
@@ -148,7 +142,7 @@ public class Agent
         else
         {
             posCol--;
-            fitness--;
+            //fitness--;
         }
     }
 

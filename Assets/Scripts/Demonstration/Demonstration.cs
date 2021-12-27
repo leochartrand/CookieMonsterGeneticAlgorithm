@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Environment = Academy.Environment;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 
 public class Demonstration : MonoBehaviour
@@ -15,11 +16,8 @@ public class Demonstration : MonoBehaviour
     private string strategy;
     private float epsilon;
 
-    private GameObject DemoObject;
     public void Setup(float ep, float NPE, string strat)
     {
-        DemoObject = GameObject.Find("DemoActivator");
-
         epsilon = ep;
         strategy = strat;
         
@@ -43,6 +41,9 @@ public class Demonstration : MonoBehaviour
         ugrid.ClearGrid();
         environment.EnvReset();
         Destroy(UEnv);
-        DemoObject.SetActive(false);
+        SceneManager.UnloadScene("Demonstration");
+        GameObject gsim = Array.Find(SceneManager.GetSceneByName("Simulation").GetRootGameObjects(), go => go.name == "Simulator");
+        gsim.SetActive(true);
+        gsim.GetComponent<Simulator>().StartSimulation();
     }
 }

@@ -30,8 +30,14 @@ public class Menu : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("OnSceneLoaded: " + scene.name);
-        sim = GameObject.Find("Simulator").GetComponent<Simulator>();
-        sim.InitSim(population, Env_per_Agent, Mutation_rate, density, GPU_Enabled);
+
+        if (scene.name == "Simulation") {
+            sim = GameObject.Find("Simulator").GetComponent<Simulator>();
+            sim.InitSim(population, Env_per_Agent, Mutation_rate, density);
+        }
+        else if (scene.name == "Demonstration") {
+            sim.SetupDemo();
+        }
     }
     
     public void Quit()

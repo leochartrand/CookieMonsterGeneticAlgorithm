@@ -32,7 +32,7 @@ public class Simulator : MonoBehaviour
   
     
     //Initialization
-    public void InitSim(int pop, int epa, float mr, float d, bool wGPU)
+    public void InitSim(int pop, int epa, float mr, float d)
     {
         Population = pop;
         EPA = epa;
@@ -48,11 +48,7 @@ public class Simulator : MonoBehaviour
         InitGM();
         InitAcademy();
         ToggleText = ToggleLabel.GetComponent<Text>();
-        Demonstration = GameObject.Find("DemoActivator");
-        Debug.Log(Demonstration.name);
-        demo = Demonstration.GetComponentInChildren<Demonstration>();
-        Demonstration.SetActive(false);
-        StartCoroutine(RunSimulation());
+        StartSimulation();
     }
 
     private void InitGM()
@@ -86,24 +82,35 @@ public class Simulator : MonoBehaviour
     public void ToggleSim(bool value)
     {
         ToggleText.text = value ? "STOP" : "START";
-        Debug.Log(ToggleText.text);
         simIsEnabled = value;
         StepByStep.interactable = !value;
     }
 
     public void StartDemonstration()
-    {
-        Demonstration.SetActive(true);
-        demo.Setup((float)0.001, Density, academy.GetBestStrat());
+    {        
+        SceneManager.LoadScene("Demonstration", LoadSceneMode.Additive);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode){}
     }
-    
+
+    public void SetupDemo() {
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Demonstration"));
+        demo = Array.Find(SceneManager.GetSceneByName("Demonstration").GetRootGameObjects(), go => go.name == "Demonstration").GetComponent<Demonstration>();
+        demo.Setup((float)0.001, Density, academy.GetBestStrat());
+        GameObject.Find("Simulator").SetActive(false);
+    }
+
 
     //==================================================================================================================
     
+    public void StartSimulation() {
+        StartCoroutine(RunSimulation());
+    }
+
     //Simulation
     private IEnumerator RunSimulation()
     {
-        for (int i = 0; i < 1000; i++) // Stops at 1000 generations for practical purposes
+        for (int i = 0; i < 1000; i++) // Sets a cap at 1000 generations for practical purposes
         {
             yield return StartCoroutine(RunGeneration());
         }

@@ -22,7 +22,7 @@ public class NomGrid
 
     public void initGrid(float NPE)
     {
-        Random rnd = new Random(Guid.NewGuid().GetHashCode());
+        Random rnd = new Random();
         
         for (int i = 0; i < rows; i++)
         {
@@ -41,7 +41,7 @@ public class NomGrid
         }
     }
 
-    private byte getValueHere(int row, int col)
+    private byte getCellValue(int row, int col)
     {
         bool value;
         
@@ -63,15 +63,15 @@ public class NomGrid
     {
         byte state = 0;
         //here
-        state += (byte)(getValueHere(row, col) * 81);
+        state += (byte)(getCellValue(row, col) * 81);
         //up
-        state += (byte)(getValueHere(row + 1, col) * 27);
+        state += (byte)(getCellValue(row + 1, col) * 27);
         //right
-        state += (byte)(getValueHere(row, col + 1) * 9);
+        state += (byte)(getCellValue(row, col + 1) * 9);
         //down
-        state += (byte)(getValueHere(row - 1, col) * 3);
+        state += (byte)(getCellValue(row - 1, col) * 3);
         //left
-        state += getValueHere(row, col - 1);
+        state += getCellValue(row, col - 1);
         
         return state;
     }

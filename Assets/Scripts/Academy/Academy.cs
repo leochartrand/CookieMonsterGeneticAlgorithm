@@ -40,10 +40,7 @@ namespace Academy
             environments = new List<Environment>();
             for (int i = 0; i < POPULATION; i++)
             {
-                agents.Add(new Species(MUTATION_RATE));
-                agents[i].GenerateRandomStrategy();
-                agents[i].SetFitness(0);
-                
+                agents.Add(new Species(MUTATION_RATE));                
                 environments.Add(new Environment());
             }
             
@@ -51,8 +48,6 @@ namespace Academy
         
         public void NextGen()
         {
-            Debug.Log("Best Fitness: " + agents[0].GetFitness() + "\n                Mean Fitness: " + meanFitness);
-        
             NaturalSelection();
         
             Reproduce();
@@ -77,42 +72,17 @@ namespace Academy
             agents[agIndex].SetFitness(Mathf.RoundToInt(agentMeanFitness));
         }
 
-        private void NaturalSelection()
-        {
-            /*
-            int cptr = 0;
-        
-            while (cptr < POPULATION / 2)
-            {
-                int max = POPULATION - cptr;
-            
-                float a = Random.Range(0.0f, 1.0f);
-                float b = (Mathf.Pow(Random.Range(-1.0f, 1.0f), 3 ) + 1)/2;
-                if (a > b)
-                {
-                    int index = (int) Mathf.Floor(a * max);
-                    agents.RemoveAt(index);
-                    cptr++;
-                }
-            }*/
-            agents.RemoveRange(POPULATION/2, POPULATION/2);
-        }
-    
-        private void Reproduce()
-        {
-            List<Species> babies = agents;
-
-            foreach (Species bb in babies)
-            {
-                bb.Mutate();
-            }
-        
-            agents.AddRange(babies);
-        }
-
         public void ExtractData()
         {
             agents.Sort((x,y) => y.GetFitness().CompareTo(x.GetFitness()));
+
+            string agentslog = "";
+            foreach (Species ag in agents)
+            {
+                agentslog += (ag.GetFitness().ToString() + "\n");
+            }
+            
+            Debug.Log("Agents:\n" + agentslog);
 
             float mean = 0;
             foreach (Species ag in agents)
@@ -130,18 +100,9 @@ namespace Academy
             SDHighFitness = meanFitness + sd;
 
             SDLowFitness = meanFitness - sd;
-        }
 
-        private float StandardDev(float mean)
-        {
-            float sd = 0;
-
-            foreach (Species ag in agents)
-            {
-                sd += (float)Math.Pow((ag.GetFitness() - mean), 2);
-            }
-
-            return (float)Math.Sqrt(sd / POPULATION);
+            Debug.Log("Best Fitness: " + maxFitness + "\n                Mean Fitness: " + meanFitness);
+            Debug.Log("Worst Fitness: " + minFitness + "\n                Standard Dev: " + sd);
         }
 
         public float GetMaxFit()
@@ -172,6 +133,51 @@ namespace Academy
         public string GetBestStrat()
         {
             return agents[0].GetStrategy();
+        }
+
+        // Private methods
+
+        private void NaturalSelection()
+        {
+            int cptr = 0;
+        
+            while (cptr < POPULATION / 2)
+            {
+                int max = POPULATION - cptr;
+            
+                float a = Random.Range(0.0f, 1.0f);
+                float b = (Mathf.Pow(Random.Range(-1.0f, 1.0f), 3 ) + 1)/2;
+                if (a > b)
+                {
+                    int index = (int) Mathf.Floor(a * max);
+                    agents.RemoveAt(index);
+                    cptr++;
+                }
+            }
+        }
+    
+        private void Reproduce()
+        {
+            List<Species> babies = new List<Species>();
+
+            foreach (Species sp in agents)
+            {
+                babies.Add(sp.Reproduce());
+            }
+        
+            agents.AddRange(babies);
+        }
+
+        private float StandardDev(float mean)
+        {
+            float sd = 0;
+
+            foreach (Species ag in agents)
+            {
+                sd += (float)Math.Pow((ag.GetFitness() - mean), 2);
+            }
+
+            return (float)Math.Sqrt(sd / POPULATION);
         }
 
     }
