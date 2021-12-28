@@ -12,7 +12,6 @@ This last variable is used to get a better approximation of an agents' fitness b
 
 Stochasticity is used thoroughly.  
 
-Written entirely in C#, to be run inside the Unity Editor.  
-The project was made with the intent of running the simulations in the editor and will not be released as a compiled program.
+Written entirely in C#.  
 
 The GA model is loosely based on Uri Wilensky's NetLogo model (Public domain).
